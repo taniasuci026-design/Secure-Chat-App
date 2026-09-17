@@ -3,9 +3,10 @@ import { useAuth } from '../../context/AuthContext'
 import { getConversation } from '../../services/messages'
 import { uploadFile } from '../../services/files'
 import { deriveConversationKey, encryptMessage, decryptMessage, hashMessage } from '../../utils/crypto'
+import { ArrowLeft, LockKeyhole, Paperclip, Send } from 'lucide-react'
 import MessageBubble from './MessageBubble'
 
-export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], searchedMessageId = null }) {
+export default function ChatWindow({ selectedUser, onBack, wsRef, onlineUsers = [], searchedMessageId = null }) {
   const { user } = useAuth()
   const [messages, setMessages] = useState([])
   const [decryptedMessages, setDecryptedMessages] = useState({})
@@ -191,7 +192,7 @@ export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], sear
     return (
       <div className="flex-1 flex items-center justify-center bg-pastel">
         <div className="text-center text-burgundy-400">
-          <div className="text-5xl mb-4">🔒</div>
+          <LockKeyhole size={48} strokeWidth={1.8} className="mx-auto mb-4" />
           <p className="text-lg font-medium text-burgundy-500">Pilih percakapan</p>
           <p className="text-sm mt-1">Semua pesan dienkripsi end-to-end</p>
         </div>
@@ -200,8 +201,12 @@ export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], sear
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-pastel text-burgundy-500">
+    <div className={`${selectedUser ? 'flex' : 'hidden md:flex'} flex-1 min-w-0 flex-col bg-pastel text-burgundy-500`}>
       <div className="flex items-center gap-3 px-4 py-3 bg-butter border-b border-burgundy-500/20">
+        <button onClick={onBack} aria-label="Kembali ke daftar kontak" title="Kembali"
+          className="md:hidden text-burgundy-400 hover:text-burgundy-500 p-1 -ml-1">
+          <ArrowLeft size={20} strokeWidth={2} />
+        </button>
         <div className="relative">
           {selectedUser.avatar_url ? (
             <img src={selectedUser.avatar_url} alt={selectedUser.username}
@@ -215,10 +220,13 @@ export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], sear
         </div>
         <div>
           <p className="text-burgundy-500 font-medium text-sm">{selectedUser.full_name || selectedUser.username}</p>
-          <p className="text-burgundy-400 text-xs">{isOnline ? '🟢 Online' : '⚫ Offline'}</p>
+          <p className="flex items-center gap-1.5 text-burgundy-400 text-xs">
+            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-burgundy-500' : 'bg-burgundy-300'}`} />
+            {isOnline ? 'Online' : 'Offline'}
+          </p>
         </div>
         <div className="ml-auto flex items-center gap-1 text-burgundy-400 text-xs">
-          <span>🔒</span>
+          <LockKeyhole size={14} strokeWidth={2} />
           <span>End-to-End Encrypted</span>
         </div>
       </div>
@@ -257,7 +265,7 @@ export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], sear
           <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
           <button onClick={() => fileInputRef.current?.click()}
             className="text-burgundy-400 hover:text-burgundy-500 p-2 transition-colors" title="Lampirkan file">
-            📎
+            <Paperclip size={20} strokeWidth={2} />
           </button>
           <input type="text" value={input} onChange={handleTyping}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
@@ -265,10 +273,13 @@ export default function ChatWindow({ selectedUser, wsRef, onlineUsers = [], sear
             className="flex-1 bg-butter text-burgundy-500 rounded-xl px-4 py-2.5 text-sm border border-burgundy-500/30 focus:outline-none focus:border-burgundy-500" />
           <button onClick={handleSend} disabled={!input.trim()}
             className="bg-burgundy-500 hover:bg-burgundy-400 disabled:opacity-40 text-butter p-2.5 rounded-xl transition-colors">
-            ➤
+            <Send size={18} strokeWidth={2} />
           </button>
         </div>
-        <p className="text-burgundy-400 text-xs mt-1 text-center">🔒 Dienkripsi AES-256-CBC</p>
+        <p className="flex items-center justify-center gap-1 text-burgundy-400 text-xs mt-1">
+          <LockKeyhole size={12} strokeWidth={2} />
+          Dienkripsi AES-256-CBC
+        </p>
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { BarChart3, CheckCircle2, ClipboardList, MessageCircle, Shield, Users } from 'lucide-react'
 
 export default function AdminPage() {
   const { user } = useAuth()
@@ -42,7 +43,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-pastel p-6 text-burgundy-500">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-burgundy-500">🛡 Admin Dashboard</h1>
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-burgundy-500"><Shield size={26} strokeWidth={2} /> Admin Dashboard</h1>
           <button onClick={() => navigate('/chat')} className="text-burgundy-400 hover:text-burgundy-500 text-sm">← Kembali ke Chat</button>
         </div>
 
@@ -51,7 +52,10 @@ export default function AdminPage() {
           {['stats', 'users', 'logs'].map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === t ? 'bg-burgundy-500 text-butter' : 'bg-butter text-burgundy-500 hover:bg-burgundy-100'}`}>
-              {t === 'stats' ? '📊 Statistik' : t === 'users' ? '👥 Users' : '📋 Logs'}
+              <span className="flex items-center gap-2">
+                {t === 'stats' ? <BarChart3 size={16} /> : t === 'users' ? <Users size={16} /> : <ClipboardList size={16} />}
+                {t === 'stats' ? 'Statistik' : t === 'users' ? 'Users' : 'Logs'}
+              </span>
             </button>
           ))}
         </div>
@@ -59,13 +63,13 @@ export default function AdminPage() {
         {tab === 'stats' && stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Total Users', value: stats.total_users, icon: '👥' },
-              { label: 'User Aktif', value: stats.active_users, icon: '✅' },
-              { label: 'Total Pesan', value: stats.total_messages, icon: '💬' },
-              { label: 'Activity Logs', value: stats.total_activity_logs, icon: '📋' },
+              { label: 'Total Users', value: stats.total_users, icon: Users },
+              { label: 'User Aktif', value: stats.active_users, icon: CheckCircle2 },
+              { label: 'Total Pesan', value: stats.total_messages, icon: MessageCircle },
+              { label: 'Activity Logs', value: stats.total_activity_logs, icon: ClipboardList },
             ].map(s => (
               <div key={s.label} className="bg-butter rounded-xl p-4 border border-burgundy-500/20">
-                <div className="text-2xl mb-1">{s.icon}</div>
+                <s.icon size={24} strokeWidth={2} className="text-burgundy-500 mb-1" />
                 <div className="text-2xl font-bold text-burgundy-500">{s.value}</div>
                 <div className="text-burgundy-400 text-sm">{s.label}</div>
               </div>
@@ -93,7 +97,7 @@ export default function AdminPage() {
                         {u.is_active ? 'Aktif' : 'Nonaktif'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-burgundy-400">{u.is_admin ? '✅' : '-'}</td>
+                    <td className="px-4 py-3 text-burgundy-400">{u.is_admin ? <CheckCircle2 size={16} /> : '-'}</td>
                     <td className="px-4 py-3">
                       <button onClick={() => toggleActive(u.id)}
                         className="text-xs bg-burgundy-500 hover:bg-burgundy-400 text-butter px-3 py-1 rounded-lg transition-colors">

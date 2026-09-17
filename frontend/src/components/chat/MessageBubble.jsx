@@ -1,3 +1,5 @@
+import { Archive, Check, CheckCheck, FilePenLine, FileText, Paperclip, ShieldCheck } from 'lucide-react'
+
 export default function MessageBubble({ message, decryptedContent, isOwn }) {
   const isFile = message.message_type === 'file'
   const fileName = message.file_name || ''
@@ -31,10 +33,10 @@ export default function MessageBubble({ message, decryptedContent, isOwn }) {
 
           ) : isFile ? (
             <div className="flex items-center gap-3 px-4 py-3">
-              <div className="text-2xl">
-                {/\.pdf$/i.test(fileName) ? '📄' :
-                 /\.(doc|docx)$/i.test(fileName) ? '📝' :
-                 /\.(zip|rar)$/i.test(fileName) ? '🗜️' : '📎'}
+              <div className="text-burgundy-500">
+                {/\.pdf$/i.test(fileName) ? <FileText size={24} /> :
+                 /\.(doc|docx)$/i.test(fileName) ? <FilePenLine size={24} /> :
+                 /\.(zip|rar)$/i.test(fileName) ? <Archive size={24} /> : <Paperclip size={24} />}
               </div>
               <div>
                 <a href={`http://localhost:8000${fileUrl.replace('/api/v1', '')}`}
@@ -52,7 +54,7 @@ export default function MessageBubble({ message, decryptedContent, isOwn }) {
 
           ) : (
             <p className="text-sm leading-relaxed whitespace-pre-wrap break-words px-4 py-2.5">
-              {decryptedContent || <span className="opacity-60 italic">🔒 mendekripsi...</span>}
+              {decryptedContent || <span className="opacity-60 italic">Mendekripsi...</span>}
             </p>
           )}
         </div>
@@ -60,12 +62,12 @@ export default function MessageBubble({ message, decryptedContent, isOwn }) {
         <div className={`flex items-center gap-1 mt-0.5 px-1 ${isOwn ? 'flex-row-reverse' : ''}`}>
           <span className="text-burgundy-400 text-xs">{timeStr}</span>
           {isOwn && (
-            <span className="text-burgundy-400 text-xs">
-              {message.status === 'read' ? '✓✓' : message.status === 'delivered' ? '✓✓' : '✓'}
-            </span>
+            message.status === 'read' || message.status === 'delivered'
+              ? <CheckCheck size={14} strokeWidth={2} className="text-burgundy-400" />
+              : <Check size={14} strokeWidth={2} className="text-burgundy-400" />
           )}
           {message.message_hash && (
-            <span className="text-burgundy-400 text-xs" title="Integrity verified">🛡</span>
+            <ShieldCheck size={14} strokeWidth={2} className="text-burgundy-400" title="Integrity verified" />
           )}
         </div>
       </div>

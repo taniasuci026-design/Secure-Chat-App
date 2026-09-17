@@ -14,7 +14,7 @@ export function useWebSocket(userId, onMessage) {
     wsRef.current = ws
 
     ws.onopen = () => {
-      console.log('✅ WebSocket terhubung')
+      console.log('WebSocket terhubung')
       if (reconnectRef.current) {
         clearInterval(reconnectRef.current)
         reconnectRef.current = null

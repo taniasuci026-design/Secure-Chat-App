@@ -42,9 +42,14 @@ export default function ChatPage() {
     setActiveTab('chat')
   }
 
+  const handleBackToContacts = () => {
+    setSelectedUser(null)
+    setActiveTab('chat')
+  }
+
   return (
     <div className="h-screen flex bg-pastel text-burgundy-500 overflow-hidden">
-      <div className="w-72 flex-shrink-0 flex flex-col border-r border-burgundy-500/20">
+      <div className={`${selectedUser ? 'hidden md:flex' : 'flex'} w-full md:w-72 flex-shrink-0 flex-col border-r border-burgundy-500/20`}>
         {activeTab === 'chat' ? (
           <ContactList
             selectedUser={selectedUser}
@@ -55,11 +60,11 @@ export default function ChatPage() {
           <ProfilePage />
         )}
         <div className="flex border-t border-burgundy-500/20 bg-pastel">
-          <button onClick={() => setActiveTab('chat')} aria-label="Buka chat" title="Chat"
+          <button onClick={() => { setSelectedUser(null); setActiveTab('chat') }} aria-label="Buka chat" title="Chat"
             className={`flex-1 py-3 text-sm transition-colors ${activeTab === 'chat' ? 'text-burgundy-500' : 'text-burgundy-400 hover:text-burgundy-500'}`}>
             <MessageCircle size={20} strokeWidth={2} className="mx-auto" />
           </button>
-          <button onClick={() => setActiveTab('profile')} aria-label="Buka profil" title="Profil"
+          <button onClick={() => { setSelectedUser(null); setActiveTab('profile') }} aria-label="Buka profil" title="Profil"
             className={`flex-1 py-3 text-sm transition-colors ${activeTab === 'profile' ? 'text-burgundy-500' : 'text-burgundy-400 hover:text-burgundy-500'}`}>
             <UserRound size={20} strokeWidth={2} className="mx-auto" />
           </button>
@@ -68,6 +73,7 @@ export default function ChatPage() {
 
       <ChatWindow
         selectedUser={selectedUser}
+        onBack={handleBackToContacts}
         wsRef={chatWindowRef}
         onlineUsers={onlineUsers}
         searchedMessageId={searchedMessageId}

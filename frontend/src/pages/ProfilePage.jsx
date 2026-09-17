@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { CheckCircle2, CircleAlert, KeyRound, RefreshCw } from 'lucide-react'
+import { CheckCircle2, CircleAlert, KeyRound, Pencil, RefreshCw } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { updateMe, updatePublicKey } from '../services/users'
 import { generateRSAKeyPair, exportPublicKey, exportPrivateKey, savePrivateKey } from '../utils/crypto'
@@ -105,7 +105,7 @@ export default function ProfilePage() {
               )}
               <button onClick={() => fileInputRef.current?.click()}
                 className="absolute -bottom-1 -right-1 w-7 h-7 bg-burgundy-500 hover:bg-burgundy-400 rounded-full flex items-center justify-center text-butter text-xs border-2 border-butter">
-                ✏️
+                <Pencil size={13} strokeWidth={2} />
               </button>
               <input type="file" ref={fileInputRef} onChange={handleAvatarChange}
                 accept="image/*" className="hidden" />

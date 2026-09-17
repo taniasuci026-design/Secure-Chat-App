@@ -4,6 +4,7 @@ import { login as loginApi } from '../services/auth'
 import { useAuth } from '../context/AuthContext'
 import { generateRSAKeyPair, exportPublicKey, exportPrivateKey, savePrivateKey } from '../utils/crypto'
 import { updatePublicKey } from '../services/users'
+import { LockKeyhole } from 'lucide-react'
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' })
@@ -40,10 +41,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-pastel flex items-center justify-center p-4 text-burgundy-500">
-      <div className="bg-butter rounded-2xl p-8 w-full max-w-md border border-burgundy-500/20">
+    <div className="min-h-screen bg-pastel flex items-start sm:items-center justify-center p-4 sm:p-6 text-burgundy-500 overflow-y-auto">
+      <div className="bg-butter rounded-2xl p-5 sm:p-8 w-full max-w-md border border-burgundy-500/20">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">🔒</div>
+          <LockKeyhole size={40} strokeWidth={1.8} className="mx-auto mb-3 text-burgundy-500" />
           <h1 className="text-2xl font-bold text-burgundy-500">Secure Chat</h1>
           <p className="text-burgundy-400 text-sm mt-1">Masuk ke akun kamu</p>
         </div>
@@ -88,7 +89,7 @@ export default function LoginPage() {
 
         <p className="text-center text-burgundy-400 text-sm mt-6">
           Belum punya akun?{' '}
-          <Link to="/register" className="text-burgundy-500 hover:text-burgundy-400">Daftar sekarang</Link>
+          <Link to="/register" className="text-burgundy-500 hover:text-burgundy-400 font-bold">Daftar sekarang</Link>
         </p>
       </div>
     </div>

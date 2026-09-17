@@ -10,7 +10,7 @@ import uuid
 
 def register_user(data: UserRegister, db: Session, request: Request = None) -> User:
     if db.query(User).filter(User.username == data.username).first():
-        raise HTTPException(status_code=400, detail="Username sudah digunakan")
+        raise HTTPException(status_code=400, detail="Username telah terdaftar")
     if db.query(User).filter(User.email == data.email).first():
         raise HTTPException(status_code=400, detail="Email sudah digunakan")
 
