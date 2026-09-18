@@ -10,9 +10,8 @@ from app.models import User, Message, Contact, ActivityLog
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="Secure Chat Application with End-to-End Encryption",
     docs_url="/docs",
-    redoc_url="/redoc",
+    redoc_url="/redoc"
 )
 
 app.add_middleware(
