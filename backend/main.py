@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from app.core.config import settings
-from app.database.connection import engine, Base
+from backend.app.core.config import settings
+from backend.app.database.connection import engine, Base
 import os
 
 # Import semua models agar tabel ter-create
-from app.models import User, Message, Contact, ActivityLog
+from backend.app.models import User, Message, Contact, ActivityLog
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -24,14 +23,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve folder uploads sebagai static files (untuk preview gambar)
-UPLOAD_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "uploads"))
-os.makedirs(UPLOAD_PATH, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_PATH), name="uploads")
-
 # Register routers
-from app.api import auth, users, messages, files, admin
-from app.websocket import chat
+from backend.app.api import auth, users, messages, files, admin
+from backend.app.websocket import chat
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
@@ -44,7 +38,6 @@ app.include_router(chat.router, tags=["WebSocket"])
 @app.on_event("startup")
 async def startup():
     print(f"🚀 {settings.APP_NAME} v{settings.APP_VERSION} berjalan")
-    print(f"📁 Upload folder: {UPLOAD_PATH}")
     try:
         Base.metadata.create_all(bind=engine)
         print("✅ Database terhubung & tabel siap")
