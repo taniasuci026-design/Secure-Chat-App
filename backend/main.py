@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.core.config import settings
-from backend.app.database.connection import engine, Base
+from app.core.config import settings
+from app.database.connection import engine, Base
 import os
 
 # Import semua models agar tabel ter-create
-from backend.app.models import User, Message, Contact, ActivityLog
+from app.models import User, Message, Contact, ActivityLog
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -24,8 +24,8 @@ app.add_middleware(
 )
 
 # Register routers
-from backend.app.api import auth, users, messages, files, admin
-from backend.app.websocket import chat
+from app.api import auth, users, messages, files, admin
+from app.websocket import chat
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
