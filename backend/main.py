@@ -1,22 +1,20 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database.connection import engine, Base
-import os
 
-# Import semua models agar tabel ter-create
-from app.models import User, Message, Contact, ActivityLog
+app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
-app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
-    docs_url="/docs",
-    redoc_url="/redoc"
-)
+# CORS — baca dari env variable
+cors_origins = os.environ.get(
+    "CORS_ORIGINS",
+    "https://secure-chat-app-ckfv.vercel.app"
+).split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
