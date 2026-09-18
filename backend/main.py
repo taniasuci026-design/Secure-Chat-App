@@ -7,10 +7,7 @@ from app.database.connection import engine, Base
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
 # CORS — baca dari env variable
-cors_origins = os.environ.get(
-    "CORS_ORIGINS",
-    "https://secure-chat-app-ckfv.vercel.app"
-).split(",")
+cors_origins = settings.CORS_ORIGINS.split(",")
 
 app.add_middleware(
     CORSMiddleware,
